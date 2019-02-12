@@ -1,0 +1,36 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.topica.checking"
+    },
+    "jhipsterVersion": "5.7.2",
+    "applicationType": "monolith",
+    "baseName": "EcoTool",
+    "packageName": "com.topica.checking",
+    "packageFolder": "com/topica/checking",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "Y2RkOGU1YWIyMjU0MjQ3YTY5MDIzOWVjNjkyN2VjYTY2NmI4NTc4ZTQwNGFjY2U2MjRhMDg2ZjliZGNmM2FmZTg3NjNhNTQ1NDEzODk0NGJmZTM2YTM0ZWM3Nzc3ZjA3NmI0MWM3NzA0ZmEwNTVlZmY4ZGU2YjUzMWFiY2FlNGM=",
+    "clientFramework": "react",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "otherModules": [],
+    "enableTranslation": false
+  },
+  "generator-jhipster-entity-audit": {
+    "auditFramework": "custom"
+  }
+}

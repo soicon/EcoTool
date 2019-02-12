@@ -1,0 +1,27 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "apiVer",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dataVer",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "inputVer",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20190128120221",
+    "dto": "mapstruct",
+    "searchEngine": false,
+    "service": "serviceImpl",
+    "entityTableName": "app_version",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination",
+    "enableEntityAudit": true
+}

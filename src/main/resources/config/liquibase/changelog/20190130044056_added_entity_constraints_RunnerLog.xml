@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity RunnerLog.
+    -->
+    <changeSet id="20190130044056-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="apiversion_id"
+                                 baseTableName="runner_log"
+                                 constraintName="fk_runner_log_apiversion_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="api_version"/>
+
+        <addForeignKeyConstraint baseColumnNames="dataversion_id"
+                                 baseTableName="runner_log"
+                                 constraintName="fk_runner_log_dataversion_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="data_version"/>
+
+        <addForeignKeyConstraint baseColumnNames="inputversion_id"
+                                 baseTableName="runner_log"
+                                 constraintName="fk_runner_log_inputversion_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="input_version"/>
+
+        <addForeignKeyConstraint baseColumnNames="source_id"
+                                 baseTableName="runner_log"
+                                 constraintName="fk_runner_log_source_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="source"/>
+
+        <addForeignKeyConstraint baseColumnNames="question_id"
+                                 baseTableName="runner_log"
+                                 constraintName="fk_runner_log_question_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="question"/>
+
+        <addForeignKeyConstraint baseColumnNames="answer_id"
+                                 baseTableName="runner_log"
+                                 constraintName="fk_runner_log_answer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="answer"/>
+
+    </changeSet>
+</databaseChangeLog>

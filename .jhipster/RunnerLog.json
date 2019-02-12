@@ -1,0 +1,51 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "apiversion",
+            "otherEntityName": "apiVersion",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "version"
+        },
+        {
+            "relationshipName": "dataversion",
+            "otherEntityName": "dataVersion",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "version"
+        },
+        {
+            "relationshipName": "inputversion",
+            "otherEntityName": "inputVersion",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "version"
+        },
+        {
+            "relationshipName": "source",
+            "otherEntityName": "source",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "path"
+        },
+        {
+            "relationshipName": "question",
+            "otherEntityName": "question",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "question_text"
+        },
+        {
+            "relationshipName": "answer",
+            "otherEntityName": "answer",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "answer_text"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20190130044056",
+    "dto": "mapstruct",
+    "searchEngine": false,
+    "service": "serviceImpl",
+    "entityTableName": "runner_log",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination",
+    "enableEntityAudit": true
+}

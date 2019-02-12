@@ -1,0 +1,46 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "",
+  "relationships": [
+    {
+      "relationshipName": "question",
+      "otherEntityName": "question",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "source"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "path",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "device_id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "need_re_answer",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "question_id",
+      "fieldType": "Integer"
+    }
+  ],
+  "changelogDate": "20190125183402",
+  "dto": "mapstruct",
+  "searchEngine": false,
+  "service": "serviceImpl",
+  "entityTableName": "source",
+  "jpaMetamodelFiltering": true,
+  "pagination": "pagination",
+  "enableEntityAudit": true
+}
