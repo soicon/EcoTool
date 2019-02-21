@@ -40,3 +40,12 @@ export const Home = props => (
     </NavLink>
   </NavItem>
 );
+
+export const Processing = props => (
+  <NavItem>
+    <NavLink tag={Link} to="/entity/file-status" className="d-flex align-items-center">
+      <FontAwesomeIcon icon="home" />
+      <span>Xử lý Test</span>
+    </NavLink>
+  </NavItem>
+);

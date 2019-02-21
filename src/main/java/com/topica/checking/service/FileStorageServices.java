@@ -4,6 +4,7 @@ import com.topica.checking.config.FileStorageProperties;
 import com.topica.checking.web.rest.errors.FileStorageException;
 import com.topica.checking.web.rest.errors.MyFileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
+@EnableConfigurationProperties(value = {FileStorageProperties.class})
 public class FileStorageServices {
     private final Path fileStorageLocation;
 
@@ -93,6 +95,7 @@ public class FileStorageServices {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             File resource = new File(filePath.toUri());
             if(resource.exists()) {
+
                 return resource;
             } else {
                 throw new MyFileNotFoundException("File not found " + fileName);

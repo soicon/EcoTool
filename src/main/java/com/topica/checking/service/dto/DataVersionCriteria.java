@@ -28,6 +28,8 @@ public class DataVersionCriteria implements Serializable {
 
     private StringFilter description;
 
+    private StringFilter versionInfo;
+
     public LongFilter getId() {
         return id;
     }
@@ -52,6 +54,14 @@ public class DataVersionCriteria implements Serializable {
         this.description = description;
     }
 
+    public StringFilter getVersionInfo() {
+        return versionInfo;
+    }
+
+    public void setVersionInfo(StringFilter versionInfo) {
+        this.versionInfo = versionInfo;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -65,7 +75,8 @@ public class DataVersionCriteria implements Serializable {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(version, that.version) &&
-            Objects.equals(description, that.description);
+            Objects.equals(description, that.description) &&
+            Objects.equals(versionInfo, that.versionInfo);
     }
 
     @Override
@@ -73,7 +84,8 @@ public class DataVersionCriteria implements Serializable {
         return Objects.hash(
         id,
         version,
-        description
+        description,
+        versionInfo
         );
     }
 
@@ -83,6 +95,7 @@ public class DataVersionCriteria implements Serializable {
                 (id != null ? "id=" + id + ", " : "") +
                 (version != null ? "version=" + version + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (versionInfo != null ? "versionInfo=" + versionInfo + ", " : "") +
             "}";
     }
 

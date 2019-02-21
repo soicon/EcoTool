@@ -3540,6 +3540,11 @@ filename-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/filename-regex/-/filename-regex-2.0.1.tgz#c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
   integrity sha1-wcS5vuPglyXdsQa3XB4wH+LxiyY=
 
+filepond@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.1.2.tgz#5fbf904442acd6aa0cbcc971dd7ea898a7d98ecb"
+  integrity sha512-nVKwra27DT28uXvoqquCS2f/GTtdu+2+nEjNbhXKH27G+ud6aKt09WtFdH40f7YCSW2dcUzIxfAjgqiTP0lX9Q==
+
 fileset@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/fileset/-/fileset-2.0.3.tgz#8e7548a96d3cc2327ee5e674168723a333bba2a0"
@@ -6829,6 +6834,11 @@ neo-async@^2.5.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
   integrity sha512-MFh0d/Wa7vkKO3Y3LlacqAEeHK0mckVqzDieUKTT+KGxi+zIpeVsFxymkIiRpbpDziHc290Xr9A1O4Om7otoRA==
 
+ng-diff-match-patch@2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/ng-diff-match-patch/-/ng-diff-match-patch-2.0.6.tgz#91a01d44de11eb39475f3efbd249fd7ec2255260"
+  integrity sha512-MNhlAaHijv6xiPYJzTgzFys4JT+S1NQvSdkL62xdxjgEt1DEYG8E9RVny5BYUp23bQqvsXSvujVhEABI8DA2kg==
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
@@ -8392,6 +8402,11 @@ react-dom@^16.4.2:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.12.0"
+
+react-filepond@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/react-filepond/-/react-filepond-7.0.1.tgz#caf96526287140884a31a1476b8328d9d6ecdee2"
+  integrity sha512-PitNM44JP0K5hXnkSYV3HRlkObsWbhqaJRWizMrdHpS3pPz9/iyiOGmRpc+4T4ST3vblmiUTLRYq/+1bDcSqQw==
 
 react-hot-loader@3.1.1:
   version "3.1.1"

@@ -36,6 +36,8 @@ public class FileStatusCriteria implements Serializable {
 
     private StringFilter fileType;
 
+    private StringFilter versionInfo;
+
     public LongFilter getId() {
         return id;
     }
@@ -92,6 +94,14 @@ public class FileStatusCriteria implements Serializable {
         this.fileType = fileType;
     }
 
+    public StringFilter getVersionInfo() {
+        return versionInfo;
+    }
+
+    public void setVersionInfo(StringFilter versionInfo) {
+        this.versionInfo = versionInfo;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -109,7 +119,8 @@ public class FileStatusCriteria implements Serializable {
             Objects.equals(result, that.result) &&
             Objects.equals(status, that.status) &&
             Objects.equals(download_result_url, that.download_result_url) &&
-            Objects.equals(fileType, that.fileType);
+            Objects.equals(fileType, that.fileType) &&
+            Objects.equals(versionInfo, that.versionInfo);
     }
 
     @Override
@@ -121,7 +132,8 @@ public class FileStatusCriteria implements Serializable {
         result,
         status,
         download_result_url,
-        fileType
+        fileType,
+        versionInfo
         );
     }
 
@@ -135,6 +147,7 @@ public class FileStatusCriteria implements Serializable {
                 (status != null ? "status=" + status + ", " : "") +
                 (download_result_url != null ? "download_result_url=" + download_result_url + ", " : "") +
                 (fileType != null ? "fileType=" + fileType + ", " : "") +
+                (versionInfo != null ? "versionInfo=" + versionInfo + ", " : "") +
             "}";
     }
 

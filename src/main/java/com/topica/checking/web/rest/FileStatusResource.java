@@ -5,6 +5,7 @@ import com.google.common.io.Files;
 import com.topica.checking.domain.FileStatus;
 import com.topica.checking.service.FileStatusService;
 import com.topica.checking.web.rest.errors.BadRequestAlertException;
+import com.topica.checking.web.rest.errors.MyFileNotFoundException;
 import com.topica.checking.web.rest.util.HeaderUtil;
 import com.topica.checking.web.rest.util.PaginationUtil;
 import com.topica.checking.service.dto.FileStatusDTO;
@@ -29,19 +30,20 @@ import com.topica.checking.service.FileStorageServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,39 +93,53 @@ public class FileStatusResource {
 
     @PostMapping("/upload-file")
     @Timed
-    public ResponseEntity<FileUploadResponse> uploadFile(@RequestParam MultipartFile file) throws  URISyntaxException{
-        String filename = fileStorageService.storeFile(file);
-        String downloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(filename)
-            .toUriString();
-        FileStatusDTO fileStatusDTO = new FileStatusDTO();
-        fileStatusDTO.setName(filename);
-        fileStatusDTO.setStatus(0);
-        fileStatusDTO.setUrl(downloadURI);
-        fileStatusDTO.setFileType(file.getContentType());
-        fileStatusService.save(fileStatusDTO);
-        return ResponseEntity.ok().
-            body(new FileUploadResponse(filename,downloadURI,file.getContentType(),file.getSize()));
+    public ResponseEntity<?> uploadFile(@RequestParam("filepond") MultipartFile file) throws  URISyntaxException{
+           log.info(file.getOriginalFilename());
+
+           try {
+               Resource resource = fileStorageService.loadFileAsResource(file.getOriginalFilename());
+               throw new BadRequestAlertException("Tren he thong da co file nay roi", ENTITY_NAME, "");
+           }catch (MyFileNotFoundException ex) {
+               String filename = fileStorageService.storeFile(file);
+               String downloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/downloadFile/").path(filename)
+                   .toUriString();
+               FileStatusDTO fileStatusDTO = new FileStatusDTO();
+               fileStatusDTO.setName(filename);
+               fileStatusDTO.setStatus(0);
+               fileStatusDTO.setUrl(downloadURI);
+               fileStatusDTO.setFileType(file.getContentType());
+               fileStatusService.save(fileStatusDTO);
+               return ResponseEntity.ok().
+                   body(new FileUploadResponse(filename, downloadURI, file.getContentType(), file.getSize()));
+           }
+
     }
 
 
-    @GetMapping("/download-file/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletResponse response) throws  IOException{
-        // Load file as Resource
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws  IOException{
         Resource resource = fileStorageService.loadFileAsResource(fileName);
 
-        String originFile = fileName.replace("result-", "");
-        FileStatusDTO fileStatusDTO = fileStatusService.findByName(originFile).get();
-
         // Try to determine file's content type
-        String contentType = fileStatusDTO.getFileType();
-        // xls file
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            log.info("Could not determine file type.");
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
         return ResponseEntity.ok()
             .contentType(MediaType.parseMediaType(contentType))
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFilename())
             .body(resource);
-
-
     }
+
+
 
     /**
      * PUT  /file-statuses : Updates an existing fileStatus.
@@ -200,6 +216,14 @@ public class FileStatusResource {
     @Timed
     public ResponseEntity<Void> deleteFileStatus(@PathVariable Long id) {
         log.debug("REST request to delete FileStatus : {}", id);
+        Optional<FileStatusDTO> fileStatusDTO = fileStatusService.findOne(id);
+        Resource resource = fileStorageService.loadFileAsResource(fileStatusDTO.get().getName());
+        try {
+            File file = new File(resource.getURL().getPath());
+            file.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         fileStatusService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }

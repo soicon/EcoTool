@@ -26,6 +26,10 @@
         {
             "fieldName": "fileType",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "versionInfo",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20190201084351",
@@ -34,5 +38,6 @@
     "service": "serviceImpl",
     "entityTableName": "file_status",
     "jpaMetamodelFiltering": true,
-    "pagination": "pagination"
+    "pagination": "pagination",
+    "enableEntityAudit": true
 }

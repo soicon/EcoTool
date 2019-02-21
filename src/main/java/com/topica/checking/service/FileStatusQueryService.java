@@ -107,6 +107,9 @@ public class FileStatusQueryService extends QueryService<FileStatus> {
             if (criteria.getFileType() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFileType(), FileStatus_.fileType));
             }
+            if (criteria.getVersionInfo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getVersionInfo(), FileStatus_.versionInfo));
+            }
         }
         return specification;
     }

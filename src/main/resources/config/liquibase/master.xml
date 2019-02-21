@@ -11,10 +11,12 @@
     <include file="config/liquibase/changelog/20190128120221_added_entity_AppVersion.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190130042307_added_entity_ApiVersion.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190130042403_added_entity_InputVersion.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190130042545_added_entity_DataVersion.xml" relativeToChangelogFile="false"/>
+    <!--<include file="config/liquibase/changelog/20190130042545_added_entity_DataVersion.xml" relativeToChangelogFile="false"/>-->
     <include file="config/liquibase/changelog/20190130044056_added_entity_RunnerLog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190130092839_added_entity_EntityAuditEvent.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190201084351_added_entity_FileStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190201084351-1_added_entity_FileStatus.xml" relativeToChangelogFile="false"/>
+    <!--<include file="config/liquibase/changelog/added_entity_FileStatus.xml" relativeToChangelogFile="false"/>-->
+
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20190125183708_added_entity_constraints_Question.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190125184224_added_entity_constraints_Answer.xml" relativeToChangelogFile="false"/>

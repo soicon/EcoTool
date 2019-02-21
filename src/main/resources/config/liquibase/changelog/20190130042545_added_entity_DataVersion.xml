@@ -17,7 +17,7 @@
     <!--
         Added the entity DataVersion.
     -->
-    <changeSet id="20190130042545-1" author="jhipster">
+    <changeSet id="20190130042545" author="jhipster">
         <createTable tableName="data_version">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -30,23 +30,13 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="version_info" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         
-    </changeSet>
-    
-    <!-- Added the entity audit columns -->
-    <changeSet id="20190130092839-audit-1" author="jhipster-entity-audit">
-        <addColumn tableName="data_version">
-            <column name="created_by" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_date" type="timestamp" defaultValueDate="${now}">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
-        </addColumn>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

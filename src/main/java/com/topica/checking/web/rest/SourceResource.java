@@ -31,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
@@ -181,130 +182,42 @@ public class SourceResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    @GetMapping("/sources/finding/file/{filename}/dataver/{dataver}/apiver/{apiver}/inputver/{inputver}/")
+    @GetMapping("/sources/finding/file/{filename}/dataver/{dataver}/")
     @Timed
-    public ResponseEntity<String> finding(@PathVariable String filename,@PathVariable String dataver,@PathVariable String apiver, @PathVariable String inputver) {
+    public ResponseEntity<String> finding(@PathVariable String filename,@PathVariable String dataver) {
         Optional<DataVersionDTO> dataVersionDTO = dataVersionService.findByVersion(dataver);
         Optional<FileStatusDTO> fileStatusDTO = fileStatusService.findByName(filename);
-        Optional<InputVersionDTO> inputVersionDTO = inputVersionService.findByVersion(dataver);
-        Optional<ApiVersionDTO>  apiVersionDTO= apiVersionService.findByVersion(dataver);
+
+        fileStatusDTO.get().setStatus(1);
+        fileStatusDTO.get().setVersionInfo(dataVersionDTO.get().getVersion());
+        fileStatusService.save(fileStatusDTO.get());
         File fileData = fileStorageServices.loadFileAsFile(filename);
         API_URL = dataVersionDTO.get().getDescription().trim().replace(" ","");
         List<RunnerLogDTO> runnerLogDTOList = new ArrayList<>();
-        try {
-
-            Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
-            FileInputStream excelFile = new FileInputStream(fileData);
-            Workbook workbook = new XSSFWorkbook(excelFile);
-            Sheet datatypeSheet = workbook.getSheetAt(0);
-            Iterator<Row> iterator = datatypeSheet.iterator();
-            FetchingAPI fetchingAPI = new FetchingAPI();
-            int index = 2;
-            while (iterator.hasNext()) {
-                Object[] object = new Object[]{"","","",-1};
-                RunnerLogDTO runnerLogDTO = new RunnerLogDTO();
-
-                runnerLogDTO.setApiversionId(apiVersionDTO.get().getId());
-                runnerLogDTO.setApiversionVersion(apiVersionDTO.get().getVersion());
-
-                runnerLogDTO.setDataversionId(dataVersionDTO.get().getId());
-                runnerLogDTO.setDataversionVersion(dataVersionDTO.get().getVersion());
-
-                runnerLogDTO.setInputversionId(inputVersionDTO.get().getId());
-                runnerLogDTO.setInputversionVersion(inputVersionDTO.get().getVersion());
-
-                try {
-                    Row currentRow = iterator.next();
-                    Iterator<Cell> cellIterator = currentRow.iterator();
-                    SourceDTO sourceDTO = new SourceDTO();
-                    sourceDTO.setDevice_id("alo");
-                    sourceDTO.setNeed_re_answer(0);
-                    sourceDTO.setStatus(1);
-                    sourceDTO.setType(0);
-                    String urlImage = "";
-                    int questionId = -1;
-                    while (cellIterator.hasNext()) {
-                        Cell currentCell = cellIterator.next();
-
-                        if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-                            questionId = (int) currentCell.getNumericCellValue();
-                            sourceDTO.setQuestion_id((int) currentCell.getNumericCellValue());
-                            object[0] = questionId;
-                        }
-                        if (currentCell.getCellTypeEnum() == CellType.STRING) {
-                            urlImage = currentCell.getStringCellValue();
-                            sourceDTO.setPath(urlImage);
-                            object[1] = urlImage;
-
-                        }
-                    }
-                    SourceDTO res = sourceService.save(sourceDTO);
-                    runnerLogDTO.setSourceId(res.getId());
-                    runnerLogDTO.setSourcePath(res.getPath());
-                    byte[] imageBytes = IOUtils.toByteArray(new URL(urlImage));
-                    String base64 = Base64.getEncoder().encodeToString(imageBytes);
-
-                    JSONObject response = fetchingAPI.callApi(base64,API_URL);
-                    if (response != null) {
-                        JSONArray array = response.getJSONArray("result");
-                        if (array.length() > 0) {
-                            object[3] = 1;
-                            for (int i = 0; i < array.length(); i++) {
-                                JSONObject entry = array.getJSONObject(i);
-                                QuestionDTO questionDTO = new QuestionDTO();
-                                questionDTO.setQuestion_text((String) entry.get("question"));
-                                questionDTO.setSourceId(res.getId());
-                                object[2]= url+res.getId();
-                                questionDTO.setVisible(1);
-                                QuestionDTO quesRes = questionService.save(questionDTO);
-                                runnerLogDTO.setQuestionId(quesRes.getId());
-                                runnerLogDTO.setQuestionQuestion_text(quesRes.getQuestion_text());
-                                AnswerDTO answerDTO = new AnswerDTO();
-                                answerDTO.setAnswer_text((String) entry.get("answer"));
-                                answerDTO.setQuestionId(quesRes.getId());
-                                answerDTO.setReviewer_id(1);
-                                answerDTO.setStatus(1);
-                                answerDTO.setUser_id(1);
-                                AnswerDTO ansRes = answerService.save(answerDTO);
-                                runnerLogDTO.setAnswerAnswer_text(ansRes.getAnswer_text());
-                                runnerLogDTO.setAnswerId(ansRes.getId());
-
-                            }
-                        } else {
-                            object[3] = 0;
-                        }
-                        log.info(response.toString());
-                        log.info(object[0].toString()+"|"+object[1].toString()+"|"+object[2].toString());
-                        data.put(index, object);
-
-
-                    }
-                    runnerLogDTOList.add(runnerLogDTO);
-
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+        FetchingAPI fetchingAPI = new FetchingAPI(fileStorageServices);
+        UriComponentsBuilder baseUrl  =   ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String res = fetchingAPI.doJob(dataVersionDTO,fileData,sourceService,API_URL,url,questionService
+                    ,answerService,runnerLogService,runnerLogDTOList,filename);
+                log.info(res);
+                if(!res.equals("error")) {
+                    String downloadURI = baseUrl.path(res)
+                        .toUriString();
+                    fileStatusDTO.get().setDownload_result_url(downloadURI);
+                    fileStatusDTO.get().setResult(res);
+                    fileStatusDTO.get().setStatus(2);
+                    fileStatusService.save(fileStatusDTO.get());
+                }else{
+                    fileStatusDTO.get().setStatus(3);
+                    fileStatusService.save(fileStatusDTO.get());
                 }
-                index++;
             }
-            runnerLogService.saveAll(runnerLogDTOList);
-            String fileResult = fetchingAPI.writeExcel(data,filename,fileStorageServices);
-            if(fileResult != null) {
-                String downloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(fileResult)
-                    .toUriString();
-                fileStatusDTO.get().setDownload_result_url(downloadURI);
-                fileStatusDTO.get().setResult(fileResult);
-                fileStatusDTO.get().setStatus(1);
-                fileStatusService.save(fileStatusDTO.get());
-            }else{
-                return ResponseEntity.notFound().build();
-            }
+        }).start();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+
         return ResponseEntity.ok().body("");
     }
 

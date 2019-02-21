@@ -63,6 +63,9 @@ public class FileStatusResourceIntTest {
     private static final String DEFAULT_FILE_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_FILE_TYPE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_VERSION_INFO = "AAAAAAAAAA";
+    private static final String UPDATED_VERSION_INFO = "BBBBBBBBBB";
+
     @Autowired
     private FileStatusRepository fileStatusRepository;
 
@@ -119,7 +122,8 @@ public class FileStatusResourceIntTest {
             .result(DEFAULT_RESULT)
             .status(DEFAULT_STATUS)
             .download_result_url(DEFAULT_DOWNLOAD_RESULT_URL)
-            .fileType(DEFAULT_FILE_TYPE);
+            .fileType(DEFAULT_FILE_TYPE)
+            .versionInfo(DEFAULT_VERSION_INFO);
         return fileStatus;
     }
 
@@ -150,6 +154,7 @@ public class FileStatusResourceIntTest {
         assertThat(testFileStatus.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testFileStatus.getDownload_result_url()).isEqualTo(DEFAULT_DOWNLOAD_RESULT_URL);
         assertThat(testFileStatus.getFileType()).isEqualTo(DEFAULT_FILE_TYPE);
+        assertThat(testFileStatus.getVersionInfo()).isEqualTo(DEFAULT_VERSION_INFO);
     }
 
     @Test
@@ -188,7 +193,8 @@ public class FileStatusResourceIntTest {
             .andExpect(jsonPath("$.[*].result").value(hasItem(DEFAULT_RESULT.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].download_result_url").value(hasItem(DEFAULT_DOWNLOAD_RESULT_URL.toString())))
-            .andExpect(jsonPath("$.[*].fileType").value(hasItem(DEFAULT_FILE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].fileType").value(hasItem(DEFAULT_FILE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].versionInfo").value(hasItem(DEFAULT_VERSION_INFO.toString())));
     }
     
     @Test
@@ -207,7 +213,8 @@ public class FileStatusResourceIntTest {
             .andExpect(jsonPath("$.result").value(DEFAULT_RESULT.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
             .andExpect(jsonPath("$.download_result_url").value(DEFAULT_DOWNLOAD_RESULT_URL.toString()))
-            .andExpect(jsonPath("$.fileType").value(DEFAULT_FILE_TYPE.toString()));
+            .andExpect(jsonPath("$.fileType").value(DEFAULT_FILE_TYPE.toString()))
+            .andExpect(jsonPath("$.versionInfo").value(DEFAULT_VERSION_INFO.toString()));
     }
 
     @Test
@@ -470,6 +477,45 @@ public class FileStatusResourceIntTest {
         // Get all the fileStatusList where fileType is null
         defaultFileStatusShouldNotBeFound("fileType.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllFileStatusesByVersionInfoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        fileStatusRepository.saveAndFlush(fileStatus);
+
+        // Get all the fileStatusList where versionInfo equals to DEFAULT_VERSION_INFO
+        defaultFileStatusShouldBeFound("versionInfo.equals=" + DEFAULT_VERSION_INFO);
+
+        // Get all the fileStatusList where versionInfo equals to UPDATED_VERSION_INFO
+        defaultFileStatusShouldNotBeFound("versionInfo.equals=" + UPDATED_VERSION_INFO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllFileStatusesByVersionInfoIsInShouldWork() throws Exception {
+        // Initialize the database
+        fileStatusRepository.saveAndFlush(fileStatus);
+
+        // Get all the fileStatusList where versionInfo in DEFAULT_VERSION_INFO or UPDATED_VERSION_INFO
+        defaultFileStatusShouldBeFound("versionInfo.in=" + DEFAULT_VERSION_INFO + "," + UPDATED_VERSION_INFO);
+
+        // Get all the fileStatusList where versionInfo equals to UPDATED_VERSION_INFO
+        defaultFileStatusShouldNotBeFound("versionInfo.in=" + UPDATED_VERSION_INFO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllFileStatusesByVersionInfoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        fileStatusRepository.saveAndFlush(fileStatus);
+
+        // Get all the fileStatusList where versionInfo is not null
+        defaultFileStatusShouldBeFound("versionInfo.specified=true");
+
+        // Get all the fileStatusList where versionInfo is null
+        defaultFileStatusShouldNotBeFound("versionInfo.specified=false");
+    }
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -483,7 +529,8 @@ public class FileStatusResourceIntTest {
             .andExpect(jsonPath("$.[*].result").value(hasItem(DEFAULT_RESULT.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].download_result_url").value(hasItem(DEFAULT_DOWNLOAD_RESULT_URL.toString())))
-            .andExpect(jsonPath("$.[*].fileType").value(hasItem(DEFAULT_FILE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].fileType").value(hasItem(DEFAULT_FILE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].versionInfo").value(hasItem(DEFAULT_VERSION_INFO.toString())));
 
         // Check, that the count call also returns 1
         restFileStatusMockMvc.perform(get("/api/file-statuses/count?sort=id,desc&" + filter))
@@ -536,7 +583,8 @@ public class FileStatusResourceIntTest {
             .result(UPDATED_RESULT)
             .status(UPDATED_STATUS)
             .download_result_url(UPDATED_DOWNLOAD_RESULT_URL)
-            .fileType(UPDATED_FILE_TYPE);
+            .fileType(UPDATED_FILE_TYPE)
+            .versionInfo(UPDATED_VERSION_INFO);
         FileStatusDTO fileStatusDTO = fileStatusMapper.toDto(updatedFileStatus);
 
         restFileStatusMockMvc.perform(put("/api/file-statuses")
@@ -554,6 +602,7 @@ public class FileStatusResourceIntTest {
         assertThat(testFileStatus.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFileStatus.getDownload_result_url()).isEqualTo(UPDATED_DOWNLOAD_RESULT_URL);
         assertThat(testFileStatus.getFileType()).isEqualTo(UPDATED_FILE_TYPE);
+        assertThat(testFileStatus.getVersionInfo()).isEqualTo(UPDATED_VERSION_INFO);
     }
 
     @Test

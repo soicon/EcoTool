@@ -36,6 +36,10 @@ export class DataVersionDetail extends React.Component<IDataVersionDetailProps> 
               <span id="description">Description</span>
             </dt>
             <dd>{dataVersionEntity.description}</dd>
+            <dt>
+              <span id="versionInfo">Version Info</span>
+            </dt>
+            <dd>{dataVersionEntity.versionInfo}</dd>
           </dl>
           <Button tag={Link} to="/entity/data-version" replace color="info">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

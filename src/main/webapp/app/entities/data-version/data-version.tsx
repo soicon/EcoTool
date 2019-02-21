@@ -7,7 +7,7 @@ import { ICrudGetAllAction, getSortState, IPaginationBaseState, getPaginationIte
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './data-version.reducer';
+import { getDataEntities } from './data-version.reducer';
 import { IDataVersion } from 'app/shared/model/data-version.model';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
@@ -45,7 +45,7 @@ export class DataVersion extends React.Component<IDataVersionProps, IDataVersion
 
   getEntities = () => {
     const { activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    this.props.getDataEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -72,6 +72,9 @@ export class DataVersion extends React.Component<IDataVersionProps, IDataVersion
                 <th className="hand" onClick={this.sort('description')}>
                   Description <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={this.sort('versionInfo')}>
+                  Version Info <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -85,6 +88,7 @@ export class DataVersion extends React.Component<IDataVersionProps, IDataVersion
                   </td>
                   <td>{dataVersion.version}</td>
                   <td>{dataVersion.description}</td>
+                  <td>{dataVersion.versionInfo}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${dataVersion.id}`} color="info" size="sm">
@@ -122,7 +126,7 @@ const mapStateToProps = ({ dataVersion }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getEntities
+  getDataEntities
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

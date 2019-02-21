@@ -121,6 +121,12 @@ export class FileStatusUpdate extends React.Component<IFileStatusUpdateProps, IF
                   </Label>
                   <AvField id="file-status-fileType" type="text" name="fileType" />
                 </AvGroup>
+                <AvGroup>
+                  <Label id="versionInfoLabel" for="versionInfo">
+                    Version Info
+                  </Label>
+                  <AvField id="file-status-versionInfo" type="text" name="versionInfo" />
+                </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/file-status" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;

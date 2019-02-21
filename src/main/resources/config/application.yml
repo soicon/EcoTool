@@ -33,6 +33,10 @@ management:
         enabled: false # http://micrometer.io/ is disabled by default, as we use http://metrics.dropwizard.io/ instead
 
 spring:
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
     application:
         name: EcoTool
     profiles:

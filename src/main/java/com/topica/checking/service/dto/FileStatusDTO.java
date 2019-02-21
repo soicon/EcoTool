@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * A DTO for the FileStatus entity.
  */
-public class FileStatusDTO implements Serializable {
+public class FileStatusDTO  extends AbstractAuditingDTO implements Serializable {
 
     private Long id;
 
@@ -21,6 +21,8 @@ public class FileStatusDTO implements Serializable {
     private String download_result_url;
 
     private String fileType;
+
+    private String versionInfo;
 
     public Long getId() {
         return id;
@@ -78,6 +80,14 @@ public class FileStatusDTO implements Serializable {
         this.fileType = fileType;
     }
 
+    public String getVersionInfo() {
+        return versionInfo;
+    }
+
+    public void setVersionInfo(String versionInfo) {
+        this.versionInfo = versionInfo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -109,6 +119,7 @@ public class FileStatusDTO implements Serializable {
             ", status=" + getStatus() +
             ", download_result_url='" + getDownload_result_url() + "'" +
             ", fileType='" + getFileType() + "'" +
+            ", versionInfo='" + getVersionInfo() + "'" +
             "}";
     }
 }

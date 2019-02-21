@@ -3,10 +3,12 @@ package com.topica.checking.service.impl;
 import com.topica.checking.service.DataVersionService;
 import com.topica.checking.domain.DataVersion;
 import com.topica.checking.repository.DataVersionRepository;
-import com.topica.checking.service.specification.DataVersionSpec;
-import com.topica.checking.service.specification.SearchCriteria;
+import com.topica.checking.service.dto.ApiVersionDTO;
 import com.topica.checking.service.dto.DataVersionDTO;
 import com.topica.checking.service.mapper.DataVersionMapper;
+import com.topica.checking.service.specification.ApiversionSpec;
+import com.topica.checking.service.specification.DataVersionSpec;
+import com.topica.checking.service.specification.SearchCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,19 +66,13 @@ public class DataVersionServiceImpl implements DataVersionService {
             .map(dataVersionMapper::toDto);
     }
 
-    /**
-     * Get all the dataVersions.
-     *
-     * @return the list of entities
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<DataVersionDTO> findByVersion(String ver) {
-        log.debug("Request to get  DataVersions");
+        log.debug("InputVersionDTO to get  DataVersions");
         DataVersionSpec dataVersionSpec = new DataVersionSpec(new SearchCriteria("version",":",ver));
         return dataVersionRepository.findOne(dataVersionSpec).map(dataVersionMapper::toDto);
     }
-
     /**
      * Get one dataVersion by id.
      *

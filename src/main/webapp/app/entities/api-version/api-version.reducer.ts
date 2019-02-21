@@ -109,6 +109,14 @@ export const getEntities: ICrudGetAllAction<IApiVersion> = (page, size, sort) =>
   };
 };
 
+export const getApiEntities: ICrudGetAllAction<IApiVersion> = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_APIVERSION_LIST,
+    payload: axios.get<IApiVersion>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const getEntity: ICrudGetAction<IApiVersion> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {

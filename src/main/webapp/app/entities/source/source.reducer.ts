@@ -7,6 +7,7 @@ import { ISource, defaultValue } from 'app/shared/model/source.model';
 export const ACTION_TYPES = {
   FETCH_SOURCE_LIST: 'source/FETCH_SOURCE_LIST',
   FETCH_SOURCE: 'source/FETCH_SOURCE',
+  PROCESSING: 'source/PROCESSING',
   CREATE_SOURCE: 'source/CREATE_SOURCE',
   UPDATE_SOURCE: 'source/UPDATE_SOURCE',
   DELETE_SOURCE: 'source/DELETE_SOURCE',
@@ -47,6 +48,7 @@ export default (state: SourceState = initialState, action): SourceState => {
       };
     case REQUEST(ACTION_TYPES.CREATE_SOURCE):
     case REQUEST(ACTION_TYPES.UPDATE_SOURCE):
+    case REQUEST(ACTION_TYPES.PROCESSING):
     case REQUEST(ACTION_TYPES.DELETE_SOURCE):
       return {
         ...state,
@@ -59,6 +61,7 @@ export default (state: SourceState = initialState, action): SourceState => {
     case FAILURE(ACTION_TYPES.FETCH_QA):
     case FAILURE(ACTION_TYPES.CREATE_SOURCE):
     case FAILURE(ACTION_TYPES.UPDATE_SOURCE):
+    case FAILURE(ACTION_TYPES.PROCESSING):
     case FAILURE(ACTION_TYPES.DELETE_SOURCE):
       return {
         ...state,
@@ -87,6 +90,7 @@ export default (state: SourceState = initialState, action): SourceState => {
         entities: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.CREATE_SOURCE):
+    case SUCCESS(ACTION_TYPES.PROCESSING):
     case SUCCESS(ACTION_TYPES.UPDATE_SOURCE):
       return {
         ...state,
@@ -145,6 +149,14 @@ export const createEntity: ICrudPutAction<ISource> = entity => async dispatch =>
   });
   dispatch(getEntities());
   return result;
+};
+
+export const processingEntity = (filename, dataver) => {
+  const requestUrl = `${apiUrl}/finding/file/${filename}/dataver/${dataver}/`;
+  return {
+    type: ACTION_TYPES.PROCESSING,
+    payload: axios.get(`${requestUrl}`)
+  };
 };
 
 export const updateEntity: ICrudPutAction<ISource> = entity => async dispatch => {

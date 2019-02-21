@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "file_status")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class FileStatus implements Serializable {
+public class FileStatus extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +39,9 @@ public class FileStatus implements Serializable {
 
     @Column(name = "file_type")
     private String fileType;
+
+    @Column(name = "version_info")
+    private String versionInfo;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -126,6 +129,19 @@ public class FileStatus implements Serializable {
     public void setFileType(String fileType) {
         this.fileType = fileType;
     }
+
+    public String getVersionInfo() {
+        return versionInfo;
+    }
+
+    public FileStatus versionInfo(String versionInfo) {
+        this.versionInfo = versionInfo;
+        return this;
+    }
+
+    public void setVersionInfo(String versionInfo) {
+        this.versionInfo = versionInfo;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -158,6 +174,7 @@ public class FileStatus implements Serializable {
             ", status=" + getStatus() +
             ", download_result_url='" + getDownload_result_url() + "'" +
             ", fileType='" + getFileType() + "'" +
+            ", versionInfo='" + getVersionInfo() + "'" +
             "}";
     }
 }

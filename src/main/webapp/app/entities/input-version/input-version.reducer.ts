@@ -109,6 +109,14 @@ export const getEntities: ICrudGetAllAction<IInputVersion> = (page, size, sort) 
   };
 };
 
+export const getInputEntities: ICrudGetAllAction<IInputVersion> = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_INPUTVERSION_LIST,
+    payload: axios.get<IInputVersion>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const getEntity: ICrudGetAction<IInputVersion> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {

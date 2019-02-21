@@ -52,6 +52,10 @@ export class FileStatusDetail extends React.Component<IFileStatusDetailProps> {
               <span id="fileType">File Type</span>
             </dt>
             <dd>{fileStatusEntity.fileType}</dd>
+            <dt>
+              <span id="versionInfo">Version Info</span>
+            </dt>
+            <dd>{fileStatusEntity.versionInfo}</dd>
           </dl>
           <Button tag={Link} to="/entity/file-status" replace color="info">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

@@ -9,7 +9,7 @@ import reducer, {
   ACTION_TYPES,
   createEntity,
   deleteEntity,
-  getEntities,
+  getDataEntities,
   getEntity,
   updateEntity,
   reset
@@ -202,7 +202,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getDataEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.FETCH_DATAVERSION actions', async () => {

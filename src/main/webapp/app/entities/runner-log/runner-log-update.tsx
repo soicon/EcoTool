@@ -11,7 +11,7 @@ import { IRootState } from 'app/shared/reducers';
 import { IApiVersion } from 'app/shared/model/api-version.model';
 import { getEntities as getApiVersions } from 'app/entities/api-version/api-version.reducer';
 import { IDataVersion } from 'app/shared/model/data-version.model';
-import { getEntities as getDataVersions } from 'app/entities/data-version/data-version.reducer';
+import { getDataEntities as getDataVersions } from 'app/entities/data-version/data-version.reducer';
 import { IInputVersion } from 'app/shared/model/input-version.model';
 import { getEntities as getInputVersions } from 'app/entities/input-version/input-version.reducer';
 import { ISource } from 'app/shared/model/source.model';

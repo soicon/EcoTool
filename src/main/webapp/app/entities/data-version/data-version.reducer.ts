@@ -101,7 +101,7 @@ const apiUrl = 'api/data-versions';
 
 // Actions
 
-export const getEntities: ICrudGetAllAction<IDataVersion> = (page, size, sort) => {
+export const getDataEntities: ICrudGetAllAction<IDataVersion> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_DATAVERSION_LIST,
@@ -122,7 +122,7 @@ export const createEntity: ICrudPutAction<IDataVersion> = entity => async dispat
     type: ACTION_TYPES.CREATE_DATAVERSION,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
-  dispatch(getEntities());
+  dispatch(getDataEntities());
   return result;
 };
 
@@ -131,7 +131,7 @@ export const updateEntity: ICrudPutAction<IDataVersion> = entity => async dispat
     type: ACTION_TYPES.UPDATE_DATAVERSION,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
-  dispatch(getEntities());
+  dispatch(getDataEntities());
   return result;
 };
 
@@ -141,7 +141,7 @@ export const deleteEntity: ICrudDeleteAction<IDataVersion> = id => async dispatc
     type: ACTION_TYPES.DELETE_DATAVERSION,
     payload: axios.delete(requestUrl)
   });
-  dispatch(getEntities());
+  dispatch(getDataEntities());
   return result;
 };
 

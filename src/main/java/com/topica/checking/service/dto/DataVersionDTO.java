@@ -6,13 +6,15 @@ import java.util.Objects;
 /**
  * A DTO for the DataVersion entity.
  */
-public class DataVersionDTO extends AbstractAuditingDTO implements Serializable {
+public class DataVersionDTO implements Serializable {
 
     private Long id;
 
     private String version;
 
     private String description;
+
+    private String versionInfo;
 
     public Long getId() {
         return id;
@@ -36,6 +38,14 @@ public class DataVersionDTO extends AbstractAuditingDTO implements Serializable 
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getVersionInfo() {
+        return versionInfo;
+    }
+
+    public void setVersionInfo(String versionInfo) {
+        this.versionInfo = versionInfo;
     }
 
     @Override
@@ -65,6 +75,7 @@ public class DataVersionDTO extends AbstractAuditingDTO implements Serializable 
             "id=" + getId() +
             ", version='" + getVersion() + "'" +
             ", description='" + getDescription() + "'" +
+            ", versionInfo='" + getVersionInfo() + "'" +
             "}";
     }
 }

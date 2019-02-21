@@ -97,6 +97,12 @@ export class DataVersionUpdate extends React.Component<IDataVersionUpdateProps, 
                   </Label>
                   <AvField id="data-version-description" type="text" name="description" />
                 </AvGroup>
+                <AvGroup>
+                  <Label id="versionInfoLabel" for="versionInfo">
+                    Version Info
+                  </Label>
+                  <AvField id="data-version-versionInfo" type="text" name="versionInfo" />
+                </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/data-version" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;

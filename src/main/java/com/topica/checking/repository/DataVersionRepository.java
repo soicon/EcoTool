@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface DataVersionRepository extends JpaRepository<DataVersion, Long>, JpaSpecificationExecutor<DataVersion> {
-    //DataVersion findByVersion(String ver);
+
 }
