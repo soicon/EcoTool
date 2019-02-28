@@ -14,9 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -50,6 +55,40 @@ public class DataVersionServiceImpl implements DataVersionService {
         DataVersion dataVersion = dataVersionMapper.toEntity(dataVersionDTO);
         dataVersion = dataVersionRepository.save(dataVersion);
         return dataVersionMapper.toDto(dataVersion);
+    }
+
+
+    @Scheduled(fixedDelay = 1000)
+    public void hostAvailabilityCheck() {
+            List<DataVersion> dataVersionList = dataVersionRepository.findAll();
+            for (DataVersion dataVersion: dataVersionList) {
+
+                String url = dataVersion.getDescription().split("//")[1].split("/")[0];
+                String address = url.split(":")[0];
+                int port = Integer.parseInt(url.split(":")[1]);
+                try {
+                Socket s = new Socket(address, port);
+                    if (s.isConnected()) {
+                        s.close();
+                        dataVersion.setStatus(0);
+                        dataVersionRepository.save(dataVersion);
+                    }
+                }
+                catch (UnknownHostException e)
+                { // unknown host
+                    dataVersion.setStatus(1);
+                    dataVersionRepository.save(dataVersion);
+                }
+                catch (IOException e) { // io exception, service probably not running
+                    dataVersion.setStatus(1);
+                    dataVersionRepository.save(dataVersion);
+                }
+                catch (NullPointerException e) {
+                    dataVersion.setStatus(1);
+                    dataVersionRepository.save(dataVersion);
+                }
+            }
+
     }
 
     /**

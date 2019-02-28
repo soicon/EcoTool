@@ -36,7 +36,10 @@ public class FetchingAPI {
         this.fileStorageServices = fileStorageServices;
     }
 
-    private JSONObject callApi(String base64, String API_URL) {
+    public FetchingAPI() {
+    }
+
+    public JSONObject callApi(String base64, String API_URL) {
         try {
             final String POST_PARAMS = "{\"img\":"+"\""+base64+"\""+"}";
             URL obj = new URL(API_URL);
@@ -140,11 +143,15 @@ public class FetchingAPI {
             Iterator<Cell> cellIteratorIndex = row.iterator();
             while (cellIteratorIndex.hasNext()){
                 Cell indexCell = cellIteratorIndex.next();
+                log.info(indexCell.getCellTypeEnum().name());
                 if(indexCell.getCellTypeEnum() == CellType.BLANK && rowCount != 1)
                     break;
                 if(indexCell.getCellTypeEnum() == CellType.NUMERIC ){
                     if((int)indexCell.getNumericCellValue() == -1)
                         break;
+                }
+                if(indexCell.getCellTypeEnum() == CellType.STRING && rowCount == 1 ){
+                    rowCount++;
                 }
 
                 rowCount++;

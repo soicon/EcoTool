@@ -8,3 +8,12 @@ Main page styles
   background: url('../../../static/images/jhipster_family_member_3.svg') no-repeat center top;
   background-size: contain;
 }
+
+#info {
+  display: inline-block;
+  margin-right: 30px;
+}
+
+#status {
+  display: inline-block;
+}

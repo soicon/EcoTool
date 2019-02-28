@@ -1,14 +1,16 @@
 import axios from 'axios';
-import { Storage } from 'react-jhipster';
+import { ICrudGetAllAction, Storage } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { IDataVersion } from 'app/shared/model/data-version.model';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
   GET_SESSION: 'authentication/GET_SESSION',
   LOGOUT: 'authentication/LOGOUT',
   CLEAR_AUTH: 'authentication/CLEAR_AUTH',
-  ERROR_MESSAGE: 'authentication/ERROR_MESSAGE'
+  ERROR_MESSAGE: 'authentication/ERROR_MESSAGE',
+  FETCH_DATAVERSION_LIST: 'dataVersion/FETCH_DATAVERSION_LIST'
 };
 
 const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
@@ -22,7 +24,8 @@ const initialState = {
   account: {} as any,
   errorMessage: null as string, // Errors returned from server side
   redirectMessage: null as string,
-  sessionHasBeenFetched: false
+  sessionHasBeenFetched: false,
+  data: []
 };
 
 export type AuthenticationState = Readonly<typeof initialState>;
@@ -32,10 +35,18 @@ export type AuthenticationState = Readonly<typeof initialState>;
 export default (state: AuthenticationState = initialState, action): AuthenticationState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.LOGIN):
+    case REQUEST(ACTION_TYPES.FETCH_DATAVERSION_LIST):
     case REQUEST(ACTION_TYPES.GET_SESSION):
       return {
         ...state,
         loading: true
+      };
+
+    case FAILURE(ACTION_TYPES.FETCH_DATAVERSION_LIST):
+      return {
+        ...state,
+        loading: false,
+        errorMessage: action.payload
       };
     case FAILURE(ACTION_TYPES.LOGIN):
       return {
@@ -52,6 +63,14 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         sessionHasBeenFetched: true,
         showModalLogin: true,
         errorMessage: action.payload
+      };
+
+    case SUCCESS(ACTION_TYPES.FETCH_DATAVERSION_LIST):
+      return {
+        ...state,
+        loading: false,
+        loginError: false,
+        data: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.LOGIN):
       return {
@@ -101,6 +120,15 @@ export const getSession = () => async (dispatch, getState) => {
     type: ACTION_TYPES.GET_SESSION,
     payload: axios.get('api/account')
   });
+};
+const apiUrl = 'api/data-versions';
+
+export const getDataEntities: ICrudGetAllAction<IDataVersion> = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_DATAVERSION_LIST,
+    payload: axios.get<IDataVersion>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+  };
 };
 
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {

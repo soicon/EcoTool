@@ -54,6 +54,9 @@ public class DataVersionResourceIntTest {
     private static final String DEFAULT_VERSION_INFO = "AAAAAAAAAA";
     private static final String UPDATED_VERSION_INFO = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_STATUS = 1;
+    private static final Integer UPDATED_STATUS = 2;
+
     @Autowired
     private DataVersionRepository dataVersionRepository;
 
@@ -107,7 +110,8 @@ public class DataVersionResourceIntTest {
         DataVersion dataVersion = new DataVersion()
             .version(DEFAULT_VERSION)
             .description(DEFAULT_DESCRIPTION)
-            .versionInfo(DEFAULT_VERSION_INFO);
+            .versionInfo(DEFAULT_VERSION_INFO)
+            .status(DEFAULT_STATUS);
         return dataVersion;
     }
 
@@ -135,6 +139,7 @@ public class DataVersionResourceIntTest {
         assertThat(testDataVersion.getVersion()).isEqualTo(DEFAULT_VERSION);
         assertThat(testDataVersion.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDataVersion.getVersionInfo()).isEqualTo(DEFAULT_VERSION_INFO);
+        assertThat(testDataVersion.getStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -170,7 +175,8 @@ public class DataVersionResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(dataVersion.getId().intValue())))
             .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].versionInfo").value(hasItem(DEFAULT_VERSION_INFO.toString())));
+            .andExpect(jsonPath("$.[*].versionInfo").value(hasItem(DEFAULT_VERSION_INFO.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
     }
     
     @Test
@@ -186,7 +192,8 @@ public class DataVersionResourceIntTest {
             .andExpect(jsonPath("$.id").value(dataVersion.getId().intValue()))
             .andExpect(jsonPath("$.version").value(DEFAULT_VERSION.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.versionInfo").value(DEFAULT_VERSION_INFO.toString()));
+            .andExpect(jsonPath("$.versionInfo").value(DEFAULT_VERSION_INFO.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
     }
 
     @Test
@@ -305,6 +312,72 @@ public class DataVersionResourceIntTest {
         // Get all the dataVersionList where versionInfo is null
         defaultDataVersionShouldNotBeFound("versionInfo.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllDataVersionsByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        dataVersionRepository.saveAndFlush(dataVersion);
+
+        // Get all the dataVersionList where status equals to DEFAULT_STATUS
+        defaultDataVersionShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the dataVersionList where status equals to UPDATED_STATUS
+        defaultDataVersionShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDataVersionsByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        dataVersionRepository.saveAndFlush(dataVersion);
+
+        // Get all the dataVersionList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultDataVersionShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the dataVersionList where status equals to UPDATED_STATUS
+        defaultDataVersionShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDataVersionsByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        dataVersionRepository.saveAndFlush(dataVersion);
+
+        // Get all the dataVersionList where status is not null
+        defaultDataVersionShouldBeFound("status.specified=true");
+
+        // Get all the dataVersionList where status is null
+        defaultDataVersionShouldNotBeFound("status.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllDataVersionsByStatusIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        dataVersionRepository.saveAndFlush(dataVersion);
+
+        // Get all the dataVersionList where status greater than or equals to DEFAULT_STATUS
+        defaultDataVersionShouldBeFound("status.greaterOrEqualThan=" + DEFAULT_STATUS);
+
+        // Get all the dataVersionList where status greater than or equals to UPDATED_STATUS
+        defaultDataVersionShouldNotBeFound("status.greaterOrEqualThan=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDataVersionsByStatusIsLessThanSomething() throws Exception {
+        // Initialize the database
+        dataVersionRepository.saveAndFlush(dataVersion);
+
+        // Get all the dataVersionList where status less than or equals to DEFAULT_STATUS
+        defaultDataVersionShouldNotBeFound("status.lessThan=" + DEFAULT_STATUS);
+
+        // Get all the dataVersionList where status less than or equals to UPDATED_STATUS
+        defaultDataVersionShouldBeFound("status.lessThan=" + UPDATED_STATUS);
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -315,7 +388,8 @@ public class DataVersionResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(dataVersion.getId().intValue())))
             .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].versionInfo").value(hasItem(DEFAULT_VERSION_INFO.toString())));
+            .andExpect(jsonPath("$.[*].versionInfo").value(hasItem(DEFAULT_VERSION_INFO.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
 
         // Check, that the count call also returns 1
         restDataVersionMockMvc.perform(get("/api/data-versions/count?sort=id,desc&" + filter))
@@ -365,7 +439,8 @@ public class DataVersionResourceIntTest {
         updatedDataVersion
             .version(UPDATED_VERSION)
             .description(UPDATED_DESCRIPTION)
-            .versionInfo(UPDATED_VERSION_INFO);
+            .versionInfo(UPDATED_VERSION_INFO)
+            .status(UPDATED_STATUS);
         DataVersionDTO dataVersionDTO = dataVersionMapper.toDto(updatedDataVersion);
 
         restDataVersionMockMvc.perform(put("/api/data-versions")
@@ -380,6 +455,7 @@ public class DataVersionResourceIntTest {
         assertThat(testDataVersion.getVersion()).isEqualTo(UPDATED_VERSION);
         assertThat(testDataVersion.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testDataVersion.getVersionInfo()).isEqualTo(UPDATED_VERSION_INFO);
+        assertThat(testDataVersion.getStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

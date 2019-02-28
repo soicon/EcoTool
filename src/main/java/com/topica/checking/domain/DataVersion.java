@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "data_version")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class DataVersion implements Serializable {
+public class DataVersion extends  AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,6 +30,9 @@ public class DataVersion implements Serializable {
 
     @Column(name = "version_info")
     private String versionInfo;
+
+    @Column(name = "status")
+    private Integer status;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -78,6 +81,19 @@ public class DataVersion implements Serializable {
     public void setVersionInfo(String versionInfo) {
         this.versionInfo = versionInfo;
     }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public DataVersion status(Integer status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -107,6 +123,7 @@ public class DataVersion implements Serializable {
             ", version='" + getVersion() + "'" +
             ", description='" + getDescription() + "'" +
             ", versionInfo='" + getVersionInfo() + "'" +
+            ", status=" + getStatus() +
             "}";
     }
 }

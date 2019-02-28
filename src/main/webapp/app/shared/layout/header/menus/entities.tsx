@@ -8,45 +8,14 @@ import { NavDropdown } from '../header-components';
 export const EntitiesMenu = props => (
   // tslint:disable-next-line:jsx-self-close
   <NavDropdown icon="th-list" name="Entities" id="entity-menu">
-    <DropdownItem tag={Link} to="/entity/source">
-      <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;Source
-    </DropdownItem>
-    <DropdownItem tag={Link} to="/entity/question">
-      <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;Question
-    </DropdownItem>
-    <DropdownItem tag={Link} to="/entity/answer">
-      <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;Answer
-    </DropdownItem>
-    <DropdownItem tag={Link} to="/entity/app-version">
-      <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;App Version
-    </DropdownItem>
-    <DropdownItem tag={Link} to="/entity/api-version">
-      <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;Api Version
-    </DropdownItem>
-    <DropdownItem tag={Link} to="/entity/input-version">
-      <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;Input Version
-    </DropdownItem>
     <DropdownItem tag={Link} to="/entity/data-version">
       <FontAwesomeIcon icon="asterisk" fixedWidth />
       &nbsp;Data Version
     </DropdownItem>
-    <DropdownItem tag={Link} to="/entity/runner-log">
+
+    <DropdownItem tag={Link} to="/entity/server-status">
       <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;Runner Log
-    </DropdownItem>
-    <DropdownItem tag={Link} to="/entity/file-status">
-      <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;File Status
-    </DropdownItem>
-    <DropdownItem tag={Link} to="/entity/file-status">
-      <FontAwesomeIcon icon="asterisk" fixedWidth />
-      &nbsp;File Status
+      &nbsp;Server Status
     </DropdownItem>
     <DropdownItem tag={Link} to="/entity/data-version">
       <FontAwesomeIcon icon="asterisk" fixedWidth />

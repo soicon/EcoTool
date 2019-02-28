@@ -75,6 +75,9 @@ export class DataVersion extends React.Component<IDataVersionProps, IDataVersion
                 <th className="hand" onClick={this.sort('versionInfo')}>
                   Version Info <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={this.sort('status')}>
+                  Status <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -89,6 +92,7 @@ export class DataVersion extends React.Component<IDataVersionProps, IDataVersion
                   <td>{dataVersion.version}</td>
                   <td>{dataVersion.description}</td>
                   <td>{dataVersion.versionInfo}</td>
+                  <td>{dataVersion.status}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${dataVersion.id}`} color="info" size="sm">

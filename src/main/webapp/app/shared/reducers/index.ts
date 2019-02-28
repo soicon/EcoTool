@@ -47,6 +47,10 @@ import runnerLog, {
 import fileStatus, {
   FileStatusState
 } from 'app/entities/file-status/file-status.reducer';
+// prettier-ignore
+import serverStatus, {
+  ServerStatusState
+} from 'app/entities/server-status/server-status.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -68,6 +72,7 @@ export interface IRootState {
   readonly dataVersion: DataVersionState;
   readonly runnerLog: RunnerLogState;
   readonly fileStatus: FileStatusState;
+  readonly serverStatus: ServerStatusState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -91,6 +96,7 @@ const rootReducer = combineReducers<IRootState>({
   dataVersion,
   runnerLog,
   fileStatus,
+  serverStatus,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

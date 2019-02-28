@@ -168,6 +168,44 @@ public class SourceResource {
     }
 
 
+    @PostMapping("/sources/testapi/data/{dataver}")
+    @Timed
+    public ResponseEntity<List<TestDTO>> getTests(@RequestBody List<TestDTO> datas,@PathVariable String dataver) {
+        Optional<DataVersionDTO> dataVersionDTO = dataVersionService.findByVersion(dataver);
+        API_URL = dataVersionDTO.get().getDescription().trim().replace(" ","");
+
+        FetchingAPI fetchingAPI = new FetchingAPI();
+        for (TestDTO data:
+             datas) {
+            String urlImage = data.getUrl();
+            try {
+                byte[] imageBytes = IOUtils.toByteArray(new URL(urlImage));
+
+            String base64 = Base64.getEncoder().encodeToString(imageBytes);
+            JSONObject response = fetchingAPI.callApi(base64,API_URL);
+            if (response != null) {
+                JSONArray array = response.getJSONArray("result");
+                if (array.length() > 0) {
+                    data.setResult(1);
+                } else {
+                    data.setResult(0);
+                }
+
+            }else{
+                data.setResult(-1);
+            }
+            } catch (IOException e) {
+                data.setResult(-1);
+                e.printStackTrace();
+            } catch (JSONException e) {
+                data.setResult(-1);
+                e.printStackTrace();
+            }
+        }
+
+        return ResponseEntity.ok().body(datas);
+    }
+
     /**
      * GET  /sources : get all the sources.
      *
@@ -261,4 +299,6 @@ public class SourceResource {
         sourceService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+
 }

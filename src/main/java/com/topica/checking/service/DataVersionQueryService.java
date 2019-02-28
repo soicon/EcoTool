@@ -98,6 +98,9 @@ public class DataVersionQueryService extends QueryService<DataVersion> {
             if (criteria.getVersionInfo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getVersionInfo(), DataVersion_.versionInfo));
             }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getStatus(), DataVersion_.status));
+            }
         }
         return specification;
     }

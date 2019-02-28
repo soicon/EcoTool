@@ -49,6 +49,7 @@ public class CacheConfiguration {
             cm.createCache(com.topica.checking.domain.RunnerLog.class.getName(), jcacheConfiguration);
             cm.createCache(com.topica.checking.domain.EntityAuditEvent.class.getName(), jcacheConfiguration);
             cm.createCache(com.topica.checking.domain.FileStatus.class.getName(), jcacheConfiguration);
+            cm.createCache(com.topica.checking.domain.ServerStatus.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

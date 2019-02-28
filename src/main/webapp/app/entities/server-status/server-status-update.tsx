@@ -8,19 +8,19 @@ import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipste
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './data-version.reducer';
-import { IDataVersion } from 'app/shared/model/data-version.model';
+import { getEntity, updateEntity, createEntity, reset } from './server-status.reducer';
+import { IServerStatus } from 'app/shared/model/server-status.model';
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
-export interface IDataVersionUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
+export interface IServerStatusUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IDataVersionUpdateState {
+export interface IServerStatusUpdateState {
   isNew: boolean;
 }
 
-export class DataVersionUpdate extends React.Component<IDataVersionUpdateProps, IDataVersionUpdateState> {
+export class ServerStatusUpdate extends React.Component<IServerStatusUpdateProps, IServerStatusUpdateState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,9 +44,9 @@ export class DataVersionUpdate extends React.Component<IDataVersionUpdateProps, 
 
   saveEntity = (event, errors, values) => {
     if (errors.length === 0) {
-      const { dataVersionEntity } = this.props;
+      const { serverStatusEntity } = this.props;
       const entity = {
-        ...dataVersionEntity,
+        ...serverStatusEntity,
         ...values
       };
 
@@ -59,18 +59,18 @@ export class DataVersionUpdate extends React.Component<IDataVersionUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/entity/data-version');
+    this.props.history.push('/entity/server-status');
   };
 
   render() {
-    const { dataVersionEntity, loading, updating } = this.props;
+    const { serverStatusEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
       <div>
         <Row className="justify-content-center">
           <Col md="8">
-            <h2 id="ecoToolApp.dataVersion.home.createOrEditLabel">Create or edit a DataVersion</h2>
+            <h2 id="ecoToolApp.serverStatus.home.createOrEditLabel">Create or edit a ServerStatus</h2>
           </Col>
         </Row>
         <Row className="justify-content-center">
@@ -78,38 +78,32 @@ export class DataVersionUpdate extends React.Component<IDataVersionUpdateProps, 
             {loading ? (
               <p>Loading...</p>
             ) : (
-              <AvForm model={isNew ? {} : dataVersionEntity} onSubmit={this.saveEntity}>
+              <AvForm model={isNew ? {} : serverStatusEntity} onSubmit={this.saveEntity}>
                 {!isNew ? (
                   <AvGroup>
                     <Label for="id">ID</Label>
-                    <AvInput id="data-version-id" type="text" className="form-control" name="id" required readOnly />
+                    <AvInput id="server-status-id" type="text" className="form-control" name="id" required readOnly />
                   </AvGroup>
                 ) : null}
                 <AvGroup>
-                  <Label id="versionLabel" for="version">
-                    Version
+                  <Label id="addressLabel" for="address">
+                    Address
                   </Label>
-                  <AvField id="data-version-version" type="text" name="version" />
-                </AvGroup>
-                <AvGroup>
-                  <Label id="descriptionLabel" for="description">
-                    Description
-                  </Label>
-                  <AvField id="data-version-description" type="text" name="description" />
-                </AvGroup>
-                <AvGroup>
-                  <Label id="versionInfoLabel" for="versionInfo">
-                    Version Info
-                  </Label>
-                  <AvField id="data-version-versionInfo" type="text" name="versionInfo" />
+                  <AvField id="server-status-address" type="text" name="address" />
                 </AvGroup>
                 <AvGroup>
                   <Label id="statusLabel" for="status">
                     Status
                   </Label>
-                  <AvField id="data-version-status" type="string" className="form-control" name="status" />
+                  <AvField id="server-status-status" type="string" className="form-control" name="status" />
                 </AvGroup>
-                <Button tag={Link} id="cancel-save" to="/entity/data-version" replace color="info">
+                <AvGroup>
+                  <Label id="descriptionLabel" for="description">
+                    Description
+                  </Label>
+                  <AvField id="server-status-description" type="text" name="description" />
+                </AvGroup>
+                <Button tag={Link} id="cancel-save" to="/entity/server-status" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">Back</span>
@@ -129,10 +123,10 @@ export class DataVersionUpdate extends React.Component<IDataVersionUpdateProps, 
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  dataVersionEntity: storeState.dataVersion.entity,
-  loading: storeState.dataVersion.loading,
-  updating: storeState.dataVersion.updating,
-  updateSuccess: storeState.dataVersion.updateSuccess
+  serverStatusEntity: storeState.serverStatus.entity,
+  loading: storeState.serverStatus.loading,
+  updating: storeState.serverStatus.updating,
+  updateSuccess: storeState.serverStatus.updateSuccess
 });
 
 const mapDispatchToProps = {
@@ -148,4 +142,4 @@ type DispatchProps = typeof mapDispatchToProps;
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DataVersionUpdate);
+)(ServerStatusUpdate);

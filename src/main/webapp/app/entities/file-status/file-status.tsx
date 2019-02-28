@@ -44,9 +44,7 @@ export class FileStatus extends React.Component<IFileStatusProps, IFileStatusSta
   state = {
     ...getSortState(this.props.location, ITEMS_PER_PAGE),
     modal: false,
-    dataver: '22.1',
-    apiver: '22.1',
-    inputver: '22.1',
+    dataver: 'data22.1',
     fileName: ''
   };
   componentWillMount(): void {
@@ -58,8 +56,7 @@ export class FileStatus extends React.Component<IFileStatusProps, IFileStatusSta
   }
 
   getDataVerEntities() {
-    const { activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getDataEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    this.props.getDataEntities();
   }
 
   sort = prop => () => {
@@ -244,7 +241,27 @@ export class FileStatus extends React.Component<IFileStatusProps, IFileStatusSta
             <tbody>
               {fileStatusList.map((fileStatus, i) => (
                 <tr key={`entity-${i}`}>
-                  <td>{fileStatus.createdDate}</td>
+                  <td>
+                    {parseInt(fileStatus.createdDate.split('T')[1].split(':')[0]) + 7 > 24
+                      ? fileStatus.createdDate
+                          .replace(
+                            fileStatus.createdDate.split('T')[0].split('-')[2],
+                            parseInt(fileStatus.createdDate.split('T')[0].split('-')[2]) + 1 + ''
+                          )
+                          .replace(
+                            fileStatus.createdDate.split('T')[1].split(':')[0],
+                            parseInt(fileStatus.createdDate.split('T')[1].split(':')[0]) + 7 - 24 + ''
+                          )
+                          .replace('T', '  ')
+                          .replace('Z', '')
+                      : fileStatus.createdDate
+                          .replace('T', '  ')
+                          .replace('Z', '')
+                          .replace(
+                            fileStatus.createdDate.split('T')[1].split(':')[0],
+                            parseInt(fileStatus.createdDate.split('T')[1].split(':')[0]) + 7 + ''
+                          )}
+                  </td>
                   <td>{fileStatus.name}</td>
                   <td>{fileStatus.url}</td>
                   <td>{fileStatus.result}</td>

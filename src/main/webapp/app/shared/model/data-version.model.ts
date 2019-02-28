@@ -3,6 +3,7 @@ export interface IDataVersion {
   version?: string;
   description?: string;
   versionInfo?: string;
+  status?: number;
 }
 
 export const defaultValue: Readonly<IDataVersion> = {};

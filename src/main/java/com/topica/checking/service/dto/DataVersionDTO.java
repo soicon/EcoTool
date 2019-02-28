@@ -16,6 +16,8 @@ public class DataVersionDTO implements Serializable {
 
     private String versionInfo;
 
+    private Integer status;
+
     public Long getId() {
         return id;
     }
@@ -48,6 +50,14 @@ public class DataVersionDTO implements Serializable {
         this.versionInfo = versionInfo;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,6 +86,7 @@ public class DataVersionDTO implements Serializable {
             ", version='" + getVersion() + "'" +
             ", description='" + getDescription() + "'" +
             ", versionInfo='" + getVersionInfo() + "'" +
+            ", status=" + getStatus() +
             "}";
     }
 }

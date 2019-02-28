@@ -13,6 +13,7 @@ import InputVersion from './input-version';
 import DataVersion from './data-version';
 import RunnerLog from './runner-log';
 import FileStatus from './file-status';
+import ServerStatus from './server-status';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 const Routes = ({ match }) => (
@@ -28,6 +29,7 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={`${match.url}/data-version`} component={DataVersion} />
       <ErrorBoundaryRoute path={`${match.url}/runner-log`} component={RunnerLog} />
       <ErrorBoundaryRoute path={`${match.url}/file-status`} component={FileStatus} />
+      <ErrorBoundaryRoute path={`${match.url}/server-status`} component={ServerStatus} />
       {/* jhipster-needle-add-route-path - JHipster will routes here */}
     </Switch>
   </div>

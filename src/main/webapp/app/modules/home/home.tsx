@@ -2,30 +2,55 @@ import './home.scss';
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Badge } from 'reactstrap';
 
 import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
 import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
+import { getDataEntities } from '../../entities/data-version/data-version.reducer';
 
 export interface IHomeProp extends StateProps, DispatchProps {}
 
 export class Home extends React.Component<IHomeProp> {
+  state = {
+    data: []
+  };
+  componentWillMount(): void {}
+
   componentDidMount() {
+    this.props.getDataEntities();
+
     this.props.getSession();
   }
 
+  getDataVersion() {}
+
   render() {
-    const { account } = this.props;
+    const { account, dataList } = this.props;
     return (
       <Row>
         <Col md="9">
-          <h2>Welcome, Java Hipster!</h2>
-          <p className="lead">This is your homepage</p>
+          <h2> Trạng thái server </h2>
           {account && account.login ? (
             <div>
-              <Alert color="success">You are logged in as user {account.login}.</Alert>
+              <Alert color="warning">
+                {dataList.map(
+                  data =>
+                    data.status == 0 ? (
+                      <div>
+                        <p id="info">{data.versionInfo}</p>
+                        <Badge id="status" color="success">
+                          {' '}
+                          Đang hoạt động
+                        </Badge>
+                      </div>
+                    ) : (
+                      <Badge color="danger"> Server lỗi </Badge>
+                    )
+                )}
+              </Alert>
             </div>
           ) : (
             <div>
@@ -48,6 +73,7 @@ export class Home extends React.Component<IHomeProp> {
               </Alert>
             </div>
           )}
+
           <p>If you have any question on JHipster:</p>
 
           <ul>
@@ -96,10 +122,11 @@ export class Home extends React.Component<IHomeProp> {
 
 const mapStateToProps = storeState => ({
   account: storeState.authentication.account,
+  dataList: storeState.dataVersion.entities,
   isAuthenticated: storeState.authentication.isAuthenticated
 });
 
-const mapDispatchToProps = { getSession };
+const mapDispatchToProps = { getSession, getDataEntities };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
