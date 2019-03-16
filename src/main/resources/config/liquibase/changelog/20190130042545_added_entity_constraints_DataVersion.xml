@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity DataVersion.
+    -->
+    <changeSet id="20190130042545" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="core_prefix_id"
+                                 baseTableName="data_version"
+                                 constraintName="fk_data_version_core_prefix_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="core_prefix"/>
+
+        <addForeignKeyConstraint baseColumnNames="data_prefix_id"
+                                 baseTableName="data_version"
+                                 constraintName="fk_data_version_data_prefix_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="data_prefix"/>
+
+    </changeSet>
+</databaseChangeLog>
